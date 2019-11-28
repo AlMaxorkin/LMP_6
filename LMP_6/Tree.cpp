@@ -12,12 +12,6 @@ Node* FindMin(Node* root)
 	return root;
 }
 
-Node* FindMax(Node* root)
-{
-	while (root->right != NULL)
-		root = root->right;
-	return root;
-}
 
 // To insert data in BST, returns address of root node 
 Node* Insert(Node* root, int data) {
@@ -85,25 +79,26 @@ Node* Delete(struct Node* root, int data) {
 	return root;
 }
 
-Node* DeleteByPointer(Node* p1, Node* p2)
+Node* DeleteByPointer(Node* root)
 {
-	if (p1 == NULL || p2 == NULL)
-		return p1;
 
-	Node* temp = p2;
-	temp = FindMax(p2);
-	p2->data = temp->data;
-	else if (root->left == NULL) {
-		struct Node* temp = root;
-		root = root->right;
-		delete temp;
-	}
-	else if (root->right == NULL) {
-		struct Node* temp = root;
-		root = root->left;
-		delete temp;
-	}
+	if (root == NULL)
+		return root;
+	/*
+	else if (data < root->data)
+		root->left = Delete(root->left, data);
+	else if (data > root->data)
+		root->right = Delete(root->right, data);*/
+	
+	Node* temp = root->left;
 
+	while (temp->right != NULL)
+		temp = temp->right;
+
+	root->data = temp->data;
+	delete temp;
+
+	return root;
 }
 
 void ShowStraight(Node* tree)
