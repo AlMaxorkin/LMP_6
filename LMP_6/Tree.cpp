@@ -3,8 +3,6 @@
 
 using namespace std;
 
-// Function to create a new Node in heap
-
 Node* FindMin(Node* root)
 {
 	while (root->left != NULL) 
@@ -12,29 +10,27 @@ Node* FindMin(Node* root)
 	return root;
 }
 
-
-// To insert data in BST, returns address of root node 
 Node* Insert(Node* root, int data) {
 	if (root == NULL) {
 		root = new Node();
 		root->data = data;
 		root->left = root->right = NULL;
 	}
-	// if data to be inserted is lesser, insert in left subtree. 
+	
 	else if (data <= root->data)
 		root->left = Insert(root->left, data);
-	// else, insert in right subtree. 
+
 	else
 		root->right = Insert(root->right, data);
 	return root;
 }
-//To search an element in BST, returns true if element is found
-bool Search(Node* root, int data) {
+
+Node* Search(Node* root, int data) {
 	if (root == NULL) {
-		return false;
+		return NULL;
 	}
 	else if (root->data == data) {
-		return true;
+		return root;
 	}
 	else if (data <= root->data) {
 		return Search(root->left, data);
@@ -51,14 +47,13 @@ Node* Delete(struct Node* root, int data) {
 		root->left = Delete(root->left, data);
 	else if (data > root->data) 
 		root->right = Delete(root->right, data);
-	// Wohoo... I found you, Get ready to be deleted	
 	else {
-		// Case 1:  No child
+		
 		if (root->left == NULL && root->right == NULL) {
 			delete root;
 			root = NULL;
 		}
-		//Case 2: One child 
+		
 		else if (root->left == NULL) {
 			struct Node* temp = root;
 			root = root->right;
@@ -69,7 +64,7 @@ Node* Delete(struct Node* root, int data) {
 			root = root->left;
 			delete temp;
 		}
-		// case 3: 2 children
+		
 		else {
 			struct Node* temp = FindMin(root->right);
 			root->data = temp->data;
@@ -79,53 +74,69 @@ Node* Delete(struct Node* root, int data) {
 	return root;
 }
 
-Node* DeleteByPointer(Node* root)
+void Delete_Node(struct Node* p2)
 {
+	if (p2->left == NULL || p2->right == NULL)
+	{
+		cout << "p2 must have 2 childs" << endl;
+		return;
+	}
 
-	if (root == NULL)
-		return root;
-	/*
-	else if (data < root->data)
-		root->left = Delete(root->left, data);
-	else if (data > root->data)
-		root->right = Delete(root->right, data);*/
-	
-	Node* temp = root->left;
+	Node* temp = p2->left;
+	Node* parrent = p2;
 
 	while (temp->right != NULL)
+	{
+		parrent = temp;
 		temp = temp->right;
+	}
+	p2->data = temp->data;
 
-	root->data = temp->data;
-	delete temp;
-
-	return root;
+	if(temp->left!=NULL)
+	{
+		parrent->right = temp->left;
+		delete temp;
+	}
+	else if(parrent == p2)
+	{
+		parrent->left = NULL;
+		delete temp;
+	}
+	else
+	{
+		parrent->right = NULL;
+		delete temp;
+	}
+	
 }
 
-void ShowStraight(Node* tree)
+void ShowStraight(Node* root)
 {
-	if (NULL == tree)    return;    //Если дерева нет, выходим
+	if (root == NULL)   
+		return;    
 
-	cout << tree->data << endl; //Посетили узел
-	ShowStraight(tree->left); //Обошли левое поддерево   
-	ShowStraight(tree->right); //Обошли правое поддерево   
+	cout << root->data << endl; 
+	ShowStraight(root->left);  
+	ShowStraight(root->right);  
 }
 
-void ShowSymmetric(Node* tree)
+void ShowSymmetric(Node* root)
 {
-	if (NULL == tree)    return;    //Если дерева нет, выходим
+	if (root == NULL)
+		return;   
 
-	ShowSymmetric(tree->left); //Обошли левое поддерево 
-	cout << tree->data << endl; //Посетили узел
-	ShowSymmetric(tree->right); //Обошли правое поддерево   
+	ShowSymmetric(root->left); 
+	cout << root->data << endl; 
+	ShowSymmetric(root->right);  
 }
 
-/*ОБРАТНЫЙ ОБХОД*/
-void ShowReverse(Node* tree)
+void ShowReverse(Node* root)
 {
-	if (NULL == tree)    return;    //Если дерева нет, выходим
+	if (root == NULL)
+		 return;    
 
-	ShowReverse(tree->left); //Обошли левое поддерево 
-	ShowReverse(tree->right); //Обошли правое поддерево  
+	ShowReverse(root->left); 
+	ShowReverse(root->right); 
 
-	cout << tree->data << endl; //Посетили узел 
+	cout << root->data << endl; 
 }
